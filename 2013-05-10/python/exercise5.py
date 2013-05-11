@@ -226,18 +226,15 @@ sw5 = BEZIERSTRIPE([s5,0.1,20])
 s6 = [[-0.45,-0.02],[-0.13,-0.02],[-0.06,-0.05],[-0.06,-0.45]]
 sw6 = BEZIERSTRIPE([s6,0.1,20])
 
-s7 = [[-0.06,0],[-0.05,0.06],[0.05,0.06],[0.06,0]]
-sw7 = BEZIERSTRIPE([s7,0.1,20])
+centro = COLOR(BLACK)(CYLINDER([0.13,0.06])(36))
 
-s8 = [[0.06,0],[0.05,-0.06],[-0.05,-0.06],[-0.06,0]]
-sw8 = BEZIERSTRIPE([s8,0.07,20])
+steering_wheel1 = COLOR([0.25,0.25,0.25,1])(PROD([STRUCT([sw4,sw5,sw6]),Q(0.04)]))
+steering_wheel2 = STRUCT([steering_wheel1,centro])
+steering_wheel3 = R([1,2])(PI/2)(steering_wheel2)
+steering_wheel4 = S([1,2,3])([1.4,1.4,1.4])(STRUCT([steering_wheel0,steering_wheel3]))
+steering_wheel5 = R([1,3])(-PI/3)(steering_wheel4)
 
-steering_wheel1 = COLOR([0.25,0.25,0.25,1])(PROD([STRUCT([sw4,sw5,sw6,sw7,sw8]),Q(0.04)]))
-steering_wheel2 = R([1,2])(PI/2)(steering_wheel1)
-steering_wheel3 = S([1,2,3])([1.4,1.4,1.4])(STRUCT([steering_wheel0,steering_wheel2]))
-steering_wheel4 = R([1,3])(-PI/3)(steering_wheel3)
-
-steering_wheel = T([1,2,3])([-1.7,-1.2,0.8])(steering_wheel4)
+steering_wheel = T([1,2,3])([-1.7,-1.2,0.6])(steering_wheel5)
 
 exercise4 = STRUCT([exercise3,steering_wheel]) 
 
@@ -246,7 +243,6 @@ exercise4 = STRUCT([exercise3,steering_wheel])
 ############################ EXERCISE 5 #####################################################################
 
 g = [0.784,0,0,1]
-#g = [0.898,0.894,0.886,1]
 
 ################## PARTE SUPERIORE #####################################################
 
@@ -317,27 +313,27 @@ profileY02D = COLOR(g)(STRUCT([profileY02D_1,profileY02D_2]))
 
 
 b0 = [[-8.2,-3.5,-1.2],[-9.5,-3.5,-0.1],[-9.3,-3.5,-0.5],[-6.6,-3.5,0.5]]
-b00 = MAP(spessore(b0,[0,7,0]))(GRID([20,20]))
+b00 = COLOR(g)(MAP(spessore(b0,[0,7,0]))(GRID([20,20])))
 
 b1 = [[-8.2,3.5,-1.2],[-8.7,3.5,-1.8],[-8.4,3.5,-1.8]]
-b11 = MAP(spessore(b1,[0,-7,0]))(GRID([20,20]))
+b11 = COLOR(BLACK)(MAP(spessore(b1,[0,-7,0]))(GRID([20,20])))
 
 b2 = [[-6.6,-3.5,0.5],[-5.2,-3.5,0.75],[-4.6,-3.5,0.85],[-3.1,-3.5,0.9]]
-b22 = MAP(spessore(b2,[0,7,0]))(GRID([20,20]))
+b22 = COLOR(g)(MAP(spessore(b2,[0,7,0]))(GRID([20,20])))
 
 profileX02D_ant = STRUCT([b00,b11,b22])
 
 d1 = [[7.9,-3.5,0.9],[9.1,-3.5,1.4],[9.2,-3.5,1.2],[8.4,-3.5,-1.4]]
 
-profileX02D_post = MAP(spessore(d1,[0,7,0]))(GRID([20,20]))
+profileX02D_post = COLOR(BLACK)(MAP(spessore(d1,[0,7,0]))(GRID([20,20])))
 
-profileX02D = COLOR(g)(STRUCT([profileX02D_ant,profileX02D_post]))
+profileX02D = STRUCT([profileX02D_ant,profileX02D_post])
 
 
 ####################### PARTE INFERIORE ##############################################
 
 i1 = [[4.1,-3.5,-1.8],[-3.1,-3.5,-1.8]]
-i11 = MAP(spessore(i1,[0,7,0]))(GRID([20,20]))
+i11 = MAP(spessore(i1,[0,1,0]))(GRID([20,20]))
 
 i2 = [[-8.4,-3.5,-1.8],[-6.6,-3.5,-1.8]]
 i22 = MAP(spessore(i2,[0,7,0]))(GRID([20,20]))
@@ -345,7 +341,13 @@ i22 = MAP(spessore(i2,[0,7,0]))(GRID([20,20]))
 i3 = [[7.3,3.5,-1.7],[8.4,3.5,-1.4]]
 i33 = MAP(spessore(i3,[0,-7,0]))(GRID([20,20]))
 
-profileZ02D = COLOR([0.25,0.25,0.25,1])(STRUCT([i11,i22,i33])) 
+i4 = [[-8.4,-2.5,-1.8],[7.3,-2.5,-1.8]]
+i44 = MAP(spessore(i4,[0,5,0]))(GRID([20,20]))
+
+i5 = [[4.1,3.5,-1.8],[-3.1,3.5,-1.8]]
+i55 = MAP(spessore(i5,[0,-1,0]))(GRID([20,20]))
+
+profileZ02D = COLOR([0.25,0.25,0.25,1])(STRUCT([i11,i22,i33,i44,i55])) 
 
 ######################################################################################
 
@@ -370,16 +372,16 @@ f2 = [[-0.5,1.8,1.9],[-0.5,-1.8,1.9]]
 f22 = [[-0.5,1.8,2.1],[-0.5,-1.8,2.1]]
 f_2 = MAP(forma2d(f2,f22))(GRID([20,20]))
 
-f3 = [[-3.2,3.5,0.9],[-0.5,1.8,1.9]]
-f33 = [[-3,3.3,0.9],[-0.3,1.6,1.9]]
+f3 = [[-3.1,3.5,0.9],[-0.5,1.6,2]]
+f33 = [[-3,3.5,0.9],[-0.3,1.7,1.9]]
 f_3 = MAP(forma2d(f3,f33))(GRID([20,20]))
 
-f4 = [[-3.2,-3.5,0.9],[-0.5,-1.8,1.9]]
-f44 = [[-3,-3.5,0.9],[-0.3,-1.8,1.9]]
+f4 = [[-3.1,-3.5,0.9],[-0.5,-1.6,2]]
+f44 = [[-3,-3.5,0.9],[-0.3,-1.7,1.9]]
 f_4 = MAP(forma2d(f4,f44))(GRID([20,20]))
 
-f5 = [[-1.4,3.5,0.9],[-0.5,1.8,1.9]]
-f55 = [[-1.2,3.5,0.9],[-0.3,1.8,1.9]]
+f5 = [[-1.4,3.5,0.9],[-0.5,1.7,1.9]]
+f55 = [[-1.2,3.5,0.9],[-0.3,1.7,1.9]]
 f_5 = MAP(forma2d(f5,f55))(GRID([20,20]))
 
 f6 = [[2.1,-3.5,1.1],[2.3,-1.8,2]]
@@ -394,14 +396,19 @@ f8 = [[-0.5,-1.8,1.9],[-1.4,-3.5,0.9]]
 f88 = [[-0.3,-1.6,1.9],[-1.2,-3.3,0.9]]
 f_8 = MAP(forma2d(f8,f88))(GRID([20,20]))
 
-
-
 bordo_fin = COLOR(BLACK)(STRUCT([f,f1,f_2,f_3,f_4,f_5,f_6,f_7,f_8]))
+
+# parabrabrezza
+
+v0 = [[-3.1,-3.5,0.9],[-0.5,-1.6,2]]
+v00 = [[-3.1,3.5,0.9],[-0.5,1.6,2]]
+parabrezza = COLOR([0.6863,1,0.6745,0.1])(MAP(forma2d(v0,v00))(GRID([20,20])))
+
 
 
 #########################################################################################
 
-ferrari = STRUCT([wheels,steering_wheel,scocca,bordo_fin])
+ferrari = STRUCT([wheels,steering_wheel,scocca,bordo_fin,parabrezza])
 
 exercise5 = STRUCT([ferrari,exercise2])
 
