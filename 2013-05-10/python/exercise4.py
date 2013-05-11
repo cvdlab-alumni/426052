@@ -55,6 +55,7 @@ def mapHermite(points):
     curve = CUBICHERMITE(S1)(points)
     return MAP(curve)(dom1D)
 
+
 ################################## EXERCISE 2 ############################################################
 
 ########################### y = 0 plan ####################################################
@@ -101,8 +102,73 @@ exercise2 = STRUCT([profileX0,profileY0,profileZ0])
 
 
 
+######################## EXERCISE 3 #############################################################################
 
 
+dom2D = GRID([20,20])
+
+r0 = [[0,1.3,0],[1.3,0,0],[2.4,0,0],[0,-2.4,0]]
+r00 = CUBICHERMITE(S1)(r0)
+
+r1 = [[0,0.8,0],[0.8,0,0],[1.4,0,0],[0,-1.4,0]]
+r11 = CUBICHERMITE(S1)(r1)
+
+r01 = CUBICHERMITE(S2)([r11,r00,[0,0,2.2],[0,0,-2.2]])
+w01 = MAP(r01)(dom2D)
+
+r01b = CUBICHERMITE(S2)([r00,r11,[0,0,-2.2],[0,0,2.2]])
+w01b = MAP(r01b)(dom2D)
+
+wheel0 = STRUCT([w01b,w01])
+w1 = R([1,2])(PI/2)(wheel0)
+w2 = R([1,2])(PI/2)(w1)
+w3 = R([1,2])(PI/2)(w2)
+
+wheel1 = COLOR(BLACK)(STRUCT([wheel0,w1,w2,w3]))
+
+r2 = [[0,0.55,0],[0.55,0,0],[1,0,0],[0,-1,0]]
+r22 = CUBICHERMITE(S1)(r2)
+
+r12 = CUBICHERMITE(S2)([r22,r11,[0,0,2],[0,0,-2]])
+w12 = MAP(r12)(dom2D)
+
+r12b = CUBICHERMITE(S2)([r11,r22,[0,0,-2],[0,0,2]])
+w12b = MAP(r12b)(dom2D)
+
+wheel2 = STRUCT([w12b,w12])
+w4 = R([1,2])(PI/2)(wheel2)
+w5 = R([1,2])(PI/2)(w4)
+w6 = R([1,2])(PI/2)(w5)
+
+wheel3 = COLOR(GRAY)(STRUCT([wheel2,w4,w5,w6]))
+
+wheel4 = COLOR(GRAY)(T([3])(-0.5)(CYLINDER([0.2,1])(36)))
+
+w7 = POLYLINE([[-0.19,0.2],[-0.1,0.6],[0.1,0.6],[0.2,0.2],[-0.19,0.2]])
+w8 = SOLIDIFY(w7)
+
+wheel5 = COLOR([0.9,0.9,0.9,1])(T([3])(-0.5)(PROD([w8,Q(0.9)])))
+
+wheel6 = STRUCT([wheel5,R([1,2])(2*PI/5)] * 5)
+
+w9 = [[-0.2,0],[-0.17,0.25],[0.17,0.25],[0.2,0]]
+sw9 = BEZIERSTRIPE([w9,0.1,20])
+
+w10 = [[0.2,0],[0.17,-0.25],[-0.17,-0.25],[-0.2,0]]
+sw10 = BEZIERSTRIPE([w10,0.1,20])
+
+wheel7 = T([3])(-0.5)(PROD([STRUCT([sw9,sw10]),Q(0.9)]))
+wheel8 = STRUCT([wheel1,wheel3,wheel4,wheel6,wheel7])
+wheel9 = R([2,3])(PI/2)(wheel8)
+
+wheel_0 = T([1,2,3])([-4.8,-3.5,-1.4])(wheel9)
+wheel_1 = T([1,2,3])([5.7,-3.5,-1.4])(wheel9)
+wheel_2 = T([2])(7)(wheel_0)
+wheel_3 = T([2])(7)(wheel_1)
+
+wheels = STRUCT([wheel_0,wheel_1,wheel_2,wheel_3])
+
+exercise3 = STRUCT([exercise2,wheels])
 
 ############################## EXERCISE 4 ############################################################
 
@@ -131,6 +197,7 @@ sw3 = R([1,2])(PI/2)(sw2)
 
 steering_wheel0 = COLOR(BLACK)(STRUCT([sw0,sw1,sw2,sw3]))
 
+
 s4 = [[0.45,0.07],[0.1,0.17],[-0.1,0.17],[-0.45,0.07]]
 sw4 = BEZIERSTRIPE([s4,0.1,20])
 
@@ -140,19 +207,19 @@ sw5 = BEZIERSTRIPE([s5,0.1,20])
 s6 = [[-0.45,-0.02],[-0.13,-0.02],[-0.06,-0.05],[-0.06,-0.45]]
 sw6 = BEZIERSTRIPE([s6,0.1,20])
 
-s7 = [[-0.06,0],[-0.05,0.06],[0.05,0.06],[0.06,0]]
-sw7 = BEZIERSTRIPE([s7,0.1,20])
+centro = COLOR(BLACK)(CYLINDER([0.13,0.06])(36))
 
-s8 = [[0.06,0],[0.05,-0.06],[-0.05,-0.06],[-0.06,0]]
-sw8 = BEZIERSTRIPE([s8,0.07,20])
+steering_wheel1 = COLOR([0.25,0.25,0.25,1])(PROD([STRUCT([sw4,sw5,sw6]),Q(0.04)]))
+steering_wheel2 = STRUCT([steering_wheel1,centro])
+steering_wheel3 = R([1,2])(PI/2)(steering_wheel2)
+steering_wheel4 = S([1,2,3])([1.4,1.4,1.4])(STRUCT([steering_wheel0,steering_wheel3]))
+steering_wheel5 = R([1,3])(-PI/3)(steering_wheel4)
 
-steering_wheel1 = COLOR([0.25,0.25,0.25,1])(PROD([STRUCT([sw4,sw5,sw6,sw7,sw8]),Q(0.04)]))
-steering_wheel2 = R([1,2])(PI/2)(steering_wheel1)
-steering_wheel3 = S([1,2,3])([1.4,1.4,1.4])(STRUCT([steering_wheel0,steering_wheel2]))
-steering_wheel4 = R([1,3])(-PI/3)(steering_wheel3)
+steering_wheel = T([1,2,3])([-1.7,-1.2,0.6])(steering_wheel5)
 
-steering_wheel = T([1,2,3])([-1.3,-1.2,0.8])(steering_wheel4)
 
 #######################################################################################################
 
-exercise4 = STRUCT([exercise2,steering_wheel]) 
+exercise4 = STRUCT([exercise3,steering_wheel]) 
+
+VIEW(exercise4)
